@@ -66,4 +66,4 @@ Historimed é uma aplicação web construída com Next.js e Firebase, projetada 
 
 Se você não tiver Firebase, não defina essas variáveis. O app carregará em modo demo com dados fictícios.
 
-O arquivo `vercel.json` já foi adicionado ao projeto para facilitar o deploy no Vercel.
+Importante: agora o deploy deve usar apenas as configurações do projeto no Vercel, sem `vercel.json` local.
