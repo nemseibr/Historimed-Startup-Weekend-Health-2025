@@ -1,11 +1,21 @@
 # Historimed-Startup-Weekend-Health-2025
 Projeto ganhador do 2° lugar e criado durante o Startup Weekend Health 2025.
 
-Link do evento no instagram: https://www.instagram.com/swfloripaoficial/
+<p>
+  📸 <strong>Evento no Instagram:</strong><br>
+  👉 <a href="https://www.instagram.com/swfloripaoficial/" target="_blank">
+    Acessar Instagram
+  </a>
+</p>
 
 <img width="474" height="674" alt="image" src="https://github.com/user-attachments/assets/56fc831b-0cde-425c-bc66-da3fd91cc13d" />
 
-
+<p>
+  🚀 <strong>Protótipo (criado em 1 final de semana):</strong><br>
+  👉 <a href="https://historimed-startup-weekend-health-2-seven.vercel.app" target="_blank">
+    Ver projeto online
+  </a>
+</p>
 
 Historimed é uma aplicação web construída com Next.js e Firebase, projetada para gerenciar conteúdo histórico dos pacientes em geral, oferecendo uma interface moderna e responsiva. O foco é o paciente, o mesmo poderá registrar, anexar e gerar informações sobre suas enfermidades e medicações, entregando um histórico detalhado de tudo que precisa. Quantas vezes você já esqueceu de fornecer alguma informação importate para o médico durante uma consulta médica? Com a Historimed você terá todo esse acesso, nas palmas de sua mão, através de qualquer dispositivo móvel. 
 
