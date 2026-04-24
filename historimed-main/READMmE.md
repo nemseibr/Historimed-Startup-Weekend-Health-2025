@@ -45,3 +45,25 @@ Historimed é uma aplicação web construída com Next.js e Firebase, projetada 
 
 - Ajuste as variáveis de ambiente do Firebase conforme necessário.
 - Este projeto usa o `turbopack` no script de desenvolvimento.
+
+## Deploy no Vercel
+
+1. Crie um novo projeto no Vercel e conecte ao repositório Git.
+2. Defina o diretório raiz do projeto como `historimed-main` para que o Vercel encontre o `package.json` correto.
+3. Configure o build:
+   - `Build Command`: `npm run build`
+   - `Install Command`: `npm install`
+   - `Output Directory`: deixe vazio para Next.js
+4. Defina as variáveis de ambiente do Firebase no painel do Vercel, se você quiser conectar um projeto real:
+   - `NEXT_PUBLIC_FIREBASE_API_KEY`
+   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+   - `NEXT_PUBLIC_FIREBASE_DATABASE_URL`
+   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+   - `NEXT_PUBLIC_FIREBASE_APP_ID`
+   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` (opcional)
+
+Se você não tiver Firebase, não defina essas variáveis. O app carregará em modo demo com dados fictícios.
+
+O arquivo `vercel.json` já foi adicionado ao projeto para facilitar o deploy no Vercel.

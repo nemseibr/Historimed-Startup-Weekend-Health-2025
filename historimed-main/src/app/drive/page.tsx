@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { storage, db } from "@/lib/firebase";
+import { storage, db, isFirebaseConfigured } from "@/lib/firebase";
 import {
   ref,
   uploadBytesResumable,
@@ -59,6 +59,26 @@ import Image from "next/image";
 
 // Hardcoded user for demo purposes
 const DEMO_USER_ID = "demo-user";
+const isDemoMode = !isFirebaseConfigured;
+
+const DEMO_FILES: StoredFile[] = [
+  {
+    id: "demo-1",
+    name: "Exame_Hematologia.pdf",
+    url: "#",
+    type: "application/pdf",
+    size: 1240000,
+    createdAt: new Date("2024-04-10"),
+  },
+  {
+    id: "demo-2",
+    name: "Laudo_Exame.png",
+    url: "#",
+    type: "image/png",
+    size: 540000,
+    createdAt: new Date("2024-03-25"),
+  },
+];
 
 export default function DrivePage() {
   const { toast } = useToast();
@@ -79,6 +99,11 @@ export default function DrivePage() {
   const fetchFiles = async () => {
     try {
       setLoading(true);
+      if (isDemoMode) {
+        setFiles(DEMO_FILES);
+        return;
+      }
+
       console.log("🔍 Buscando arquivos no Firebase Storage...");
 
       // Referência para a pasta do usuário no Storage
@@ -151,6 +176,14 @@ export default function DrivePage() {
   };
 
   const handleUpload = (file: File) => {
+    if (isDemoMode) {
+      toast({
+        title: "Modo demo",
+        description: "Upload não está disponível no modo demo.",
+      });
+      return;
+    }
+
     setUploading(true);
     setUploadProgress(0);
 
@@ -200,6 +233,15 @@ export default function DrivePage() {
   const handleDelete = async () => {
     if (!fileToDelete) return;
 
+    if (isDemoMode) {
+      toast({
+        title: "Modo demo",
+        description: "Exclusão não está disponível no modo demo.",
+      });
+      setFileToDelete(null);
+      return;
+    }
+
     try {
       await deleteDoc(doc(db, "files", fileToDelete.id));
 
@@ -248,10 +290,10 @@ export default function DrivePage() {
         </div>
         <Button
           onClick={() => fileInputRef.current?.click()}
-          disabled={uploading}
+          disabled={uploading || isDemoMode}
         >
           <FileUp className="mr-2 h-4 w-4" />
-          Enviar Arquivo
+          {isDemoMode ? "Modo Demo" : "Enviar Arquivo"}
         </Button>
         <input
           type="file"
@@ -266,6 +308,11 @@ export default function DrivePage() {
           <p className="text-sm font-medium">Enviando arquivo...</p>
           <Progress value={uploadProgress} />
         </div>
+      )}
+      {isDemoMode && (
+        <p className="text-sm text-muted-foreground mt-3">
+          Modo demo ativado: arquivos exibidos apenas para demonstração.
+        </p>
       )}
 
       {loading ? (

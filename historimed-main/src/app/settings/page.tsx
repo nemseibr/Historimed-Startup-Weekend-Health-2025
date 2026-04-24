@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { db } from '@/lib/firebase';
+import { db, isFirebaseConfigured } from '@/lib/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +33,7 @@ const DEMO_USER = {
     photoURL: null,
 };
 const DEMO_USER_ID = "demo-user";
-
+const isDemoMode = !isFirebaseConfigured;
 
 function ProfileSection() {
     const { toast } = useToast();
@@ -132,6 +132,19 @@ function PlanSection() {
     const [userData, setUserData] = useState<{storageUsed: number, storagePlan: number} | null>(null);
 
     useEffect(() => {
+        if (isDemoMode) {
+            setUserData({
+                storageUsed: 6 * 1024 * 1024 * 1024,
+                storagePlan: 15,
+            });
+            return;
+        }
+
+        if (!db) {
+            setUserData({ storageUsed: 0, storagePlan: 15 });
+            return;
+        }
+
         const unsub = onSnapshot(doc(db, "users", DEMO_USER_ID), (doc) => {
             const data = doc.data();
             if(data) {
@@ -147,7 +160,7 @@ function PlanSection() {
             setUserData({ storageUsed: 0, storagePlan: 15 });
         });
         return () => unsub();
-    }, []);
+    }, [isDemoMode]);
 
     const formatBytes = (bytes: number) => {
         if (bytes === 0) return '0 GB';
