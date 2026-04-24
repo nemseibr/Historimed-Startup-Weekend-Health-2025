@@ -1,0 +1,349 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user's profile information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The user's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The user's last name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "planId": {
+          "type": "string",
+          "description": "Reference to Plan. (Relationship: UserProfile 1:1 Plan)"
+        },
+        "theme": {
+          "type": "string",
+          "description": "The user's preferred theme (e.g., light, dark)."
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "planId"
+      ]
+    },
+    "HealthRecord": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "HealthRecord",
+      "type": "object",
+      "description": "Represents a single entry in a user's health history timeline.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the HealthRecord entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N HealthRecord)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The date and time of the health record entry.",
+          "format": "date-time"
+        },
+        "summary": {
+          "type": "string",
+          "description": "A brief summary of the health record entry."
+        },
+        "details": {
+          "type": "string",
+          "description": "Detailed information about the health record entry."
+        },
+        "recordType": {
+          "type": "string",
+          "description": "The type of health record (e.g., appointment, lab test, medication)."
+        },
+        "fileIds": {
+          "type": "array",
+          "description": "References to Files. (Relationship: File N:N HealthRecord)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "timestamp",
+        "summary",
+        "details",
+        "recordType"
+      ]
+    },
+    "MedicalReport": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MedicalReport",
+      "type": "object",
+      "description": "Represents a medical report generated for a doctor's consultation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the MedicalReport entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N MedicalReport)"
+        },
+        "doctorId": {
+          "type": "string",
+          "description": "Reference to Doctor. (Relationship: Doctor 1:N MedicalReport)"
+        },
+        "reasonForConsultation": {
+          "type": "string",
+          "description": "The reason for the medical consultation."
+        },
+        "reportContent": {
+          "type": "string",
+          "description": "The content of the generated medical report."
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "The date and time the report was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "doctorId",
+        "reasonForConsultation",
+        "reportContent",
+        "generatedAt"
+      ]
+    },
+    "File": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "File",
+      "type": "object",
+      "description": "Represents a health-related document stored in Firebase Storage.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the File entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to UserProfile. (Relationship: UserProfile 1:N File)"
+        },
+        "fileName": {
+          "type": "string",
+          "description": "The name of the file."
+        },
+        "fileType": {
+          "type": "string",
+          "description": "The type of the file (e.g., PDF, JPG)."
+        },
+        "fileSize": {
+          "type": "number",
+          "description": "The size of the file in bytes."
+        },
+        "storageUrl": {
+          "type": "string",
+          "description": "The URL of the file in Firebase Storage."
+        },
+        "healthRecordIds": {
+          "type": "array",
+          "description": "References to HealthRecords. (Relationship: File N:N HealthRecord)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "fileName",
+        "fileType",
+        "fileSize",
+        "storageUrl"
+      ]
+    },
+    "Plan": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Plan",
+      "type": "object",
+      "description": "Represents a user's subscription plan.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Plan entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the plan (e.g., Basic, Premium)."
+        },
+        "storageLimitGb": {
+          "type": "number",
+          "description": "The storage limit in gigabytes for the plan."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "storageLimitGb"
+      ]
+    },
+    "Doctor": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Doctor",
+      "type": "object",
+      "description": "Represents a Doctor in the medical report.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Doctor entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The doctor's name."
+        },
+        "specialization": {
+          "type": "string",
+          "description": "The doctor's specialization."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "specialization"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profile information. Path-based ownership ensures that only the user can access their profile data.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/healthRecords/{healthRecordId}",
+        "definition": {
+          "entityName": "HealthRecord",
+          "schema": {
+            "$ref": "#/backend/entities/HealthRecord"
+          },
+          "description": "Stores health records for a specific user. Path-based ownership ensures only the user can access their health records.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "healthRecordId",
+              "description": "The unique identifier of the health record."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/medicalReports/{medicalReportId}",
+        "definition": {
+          "entityName": "MedicalReport",
+          "schema": {
+            "$ref": "#/backend/entities/MedicalReport"
+          },
+          "description": "Stores medical reports generated for a user. Path-based ownership ensures that only the user can access their medical reports.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "medicalReportId",
+              "description": "The unique identifier of the medical report."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/files/{fileId}",
+        "definition": {
+          "entityName": "File",
+          "schema": {
+            "$ref": "#/backend/entities/File"
+          },
+          "description": "Stores files uploaded by a user. Path-based ownership ensures that only the user can access their files.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "fileId",
+              "description": "The unique identifier of the file."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/plans/{planId}",
+        "definition": {
+          "entityName": "Plan",
+          "schema": {
+            "$ref": "#/backend/entities/Plan"
+          },
+          "description": "Stores subscription plan information.",
+          "params": [
+            {
+              "name": "planId",
+              "description": "The unique identifier of the plan."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/doctors/{doctorId}",
+        "definition": {
+          "entityName": "Doctor",
+          "schema": {
+            "$ref": "#/backend/entities/Doctor"
+          },
+          "description": "Stores doctor information.",
+          "params": [
+            {
+              "name": "doctorId",
+              "description": "The unique identifier of the doctor."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, following the principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). Authorization Independence is achieved by avoiding hierarchical authorization dependencies and denormalizing authorization data where necessary.  Structural Segregation is implemented by grouping data with similar security requirements into separate collections. Access Modeling employs path-based ownership for private user data and the membership map pattern for collaborative data. The design also ensures data clarity with explicit state modeling, predictable schema, and semantic naming conventions. QAPs are addressed by segregating data based on access levels and implementing membership models for collaborative access.\n\nSpecifically, user-owned data is stored under `/users/{userId}`, ensuring that only the user has access. Health records, medical reports, and files are stored as subcollections under the user, providing clear ownership and simplifying security rules. Plans and Doctors are stored in top-level collections as they are referenced by user profiles and medical reports, respectively, and do not require user-specific security rules. The user's `planId` is stored in the user's profile to avoid cross-collection reads. This also allows for easier querying of users by their plan.\n\nThis structure supports robust list operations (QAPs) because each collection has a clear owner or defined access through membership maps. For example, listing health records under `/users/{userId}/healthRecords` only requires checking if the authenticated user ID matches the `userId` in the path. Similarly, listing files under `/users/{userId}/files` is secured by verifying the user's ID. The use of dedicated collections and explicit ownership avoids complex filtering in the rules, enabling secure and efficient list operations."
+  }
+}

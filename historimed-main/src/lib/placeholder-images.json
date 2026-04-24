@@ -1,0 +1,34 @@
+{
+  "placeholderImages": [
+    {
+      "id": "user-avatar",
+      "description": "Placeholder for user avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjI1OTQ3NDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "drive-1",
+      "description": "Exame de Raio-X do Tórax",
+      "imageUrl": "https://images.unsplash.com/photo-1666214282554-39104df48982?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx4LXJheSUyMG1lZGljYWx8ZW58MHx8fHwxNzYyNjQxNjMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "x-ray medical"
+    },
+    {
+      "id": "drive-2",
+      "description": "Resultado de Exame de Sangue",
+      "imageUrl": "https://images.unsplash.com/photo-1672566954988-d62513f9c198?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsYWIlMjByZXN1bHRzfGVufDB8fHx8MTc2MjY0MTYzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lab results"
+    },
+    {
+      "id": "drive-3",
+      "description": "Laudo de Ressonância Magnética",
+      "imageUrl": "https://images.unsplash.com/photo-1666214275172-ccc3b98e5519?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtcmklMjBzY2FufGVufDB8fHx8MTc2MjYwOTcyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mri scan"
+    },
+    {
+      "id": "drive-4",
+      "description": "Receita Médica",
+      "imageUrl": "https://images.unsplash.com/photo-1592323818279-0ff7babdcb75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkb2N0b3IlMjBwcmVzY3JpcHRpb258ZW58MHx8fHwxNzYyNjI3NzAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "doctor prescription"
+    }
+  ]
+}

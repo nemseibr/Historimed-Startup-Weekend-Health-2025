@@ -1,0 +1,170 @@
+/**
+ * @file Firestore Security Rules for HistoriMed
+ * @description This ruleset enforces a strict user-ownership model for private data,
+ *              while allowing public read access to certain collections like 'plans' and 'doctors'.
+ *              All user-specific data (profiles, health records, medical reports, and files)
+ *              is nested under the `/users/{userId}` path, ensuring that only the authenticated user
+ *              can access their own information.
+ *
+ * Data Structure:
+ * - /users/{userId}: User profile information. Only the user can read/write.
+ * - /users/{userId}/healthRecords/{healthRecordId}: Health records. Only the user can read/write.
+ * - /users/{userId}/medicalReports/{medicalReportId}: Medical reports. Only the user can read/write.
+ * - /users/{userId}/files/{fileId}: User files. Only the user can read/write.
+ * - /plans/{planId}: Subscription plans. Public read access.
+ * - /doctors/{doctorId}: Doctor information. Public read access.
+ *
+ * Key Security Decisions:
+ * - User Listing Disallowed: The rules explicitly deny listing all users.
+ * - Public Read-Only Collections: The 'plans' and 'doctors' collections are public for read-only purposes,
+ *   allowing any user (authenticated or not) to fetch this data.
+ * - Default Deny: All potentially ambiguous or unhandled relationships default to a secure deny policy.
+ *
+ * Denormalization for Authorization:
+ * - The `userId` field is present in all user-owned subcollections (healthRecords, medicalReports, files).
+ *   This avoids the need for complex `get()` operations to verify ownership. The rules directly
+ *   check the `userId` against `request.auth.uid` for authorization.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Secure access to user profiles. Only the authenticated user can read or write their own profile.
+     * @path /users/{userId}
+     * @allow (create, update, delete): Authenticated user with ID 'user123' can modify their own profile data.
+     * @deny (create, update, delete): Authenticated user with ID 'user456' cannot modify the profile data of user 'user123'.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId} {
+      // Helper function to check if the authenticated user is the owner of the document
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      // Allow the user to read their own profile
+      allow get: if isOwner(userId);
+      // Allow the user to list (though this is not intended, we must specify the rule)
+      allow list: if false;
+      // Allow the user to create their own profile if the userId matches the authenticated user's uid
+      allow create: if isOwner(userId) && request.resource.data.id == request.auth.uid;
+      // Allow the user to update their own profile
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id; // Prevents changing ownership
+      // Allow the user to delete their own profile
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secure access to user health records. Only the authenticated user can read or write their own health records.
+     * @path /users/{userId}/healthRecords/{healthRecordId}
+     * @allow (create, update, delete): Authenticated user with ID 'user123' can modify health record 'record456' under their profile.
+     * @deny (create, update, delete): Authenticated user with ID 'user456' cannot modify health record 'record456' under user 'user123' profile.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/healthRecords/{healthRecordId} {
+      // Helper function to check if the authenticated user is the owner of the parent document
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      // Allow the user to read their own health records
+      allow get: if isOwner(userId);
+      // Allow the user to list their own health records
+      allow list: if isOwner(userId);
+      // Allow the user to create health records
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      // Allow the user to update their own health records
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId; // Prevents changing ownership
+      // Allow the user to delete their own health records
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secure access to user medical reports. Only the authenticated user can read or write their own medical reports.
+     * @path /users/{userId}/medicalReports/{medicalReportId}
+     * @allow (create, update, delete): Authenticated user with ID 'user123' can modify medical report 'report789' under their profile.
+     * @deny (create, update, delete): Authenticated user with ID 'user456' cannot modify medical report 'report789' under user 'user123' profile.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/medicalReports/{medicalReportId} {
+      // Helper function to check if the authenticated user is the owner of the parent document
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+        function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      // Allow the user to read their own medical reports
+      allow get: if isOwner(userId);
+      // Allow the user to list their own medical reports
+      allow list: if isOwner(userId);
+      // Allow the user to create medical reports
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      // Allow the user to update their own medical reports
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId; // Prevents changing ownership
+      // Allow the user to delete their own medical reports
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secure access to user files. Only the authenticated user can read or write their own files.
+     * @path /users/{userId}/files/{fileId}
+     * @allow (create, update, delete): Authenticated user with ID 'user123' can modify file 'fileABC' under their profile.
+     * @deny (create, update, delete): Authenticated user with ID 'user456' cannot modify file 'fileABC' under user 'user123' profile.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/files/{fileId} {
+      // Helper function to check if the authenticated user is the owner of the parent document
+      function isOwner(userId) {
+        return request.auth != null && request.auth.uid == userId;
+      }
+        function isExistingOwner(userId) {
+        return isOwner(userId) && resource != null;
+      }
+      // Allow the user to read their own files
+      allow get: if isOwner(userId);
+      // Allow the user to list their own files
+      allow list: if isOwner(userId);
+      // Allow the user to create files
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      // Allow the user to update their own files
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId; // Prevents changing ownership
+      // Allow the user to delete their own files
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Public read access to subscription plans.
+     * @path /plans/{planId}
+     * @allow get: Any user can read plan information.
+     * @allow list: Any user can list plans.
+     * @deny create, update, delete: No one can create, update, or delete plans through client-side rules.
+     * @principle Public read access with restricted writes.
+     */
+    match /plans/{planId} {
+      // Allow anyone to read plan information
+      allow get, list: if true;
+      // Prevent anyone from creating, updating, or deleting plans (this should be done via backend)
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Public read access to doctor information.
+     * @path /doctors/{doctorId}
+     * @allow get: Any user can read doctor information.
+     * @allow list: Any user can list doctors.
+     * @deny create, update, delete: No one can create, update, or delete doctors through client-side rules.
+     * @principle Public read access with restricted writes.
+     */
+    match /doctors/{doctorId} {
+      // Allow anyone to read doctor information
+      allow get, list: if true;
+      // Prevent anyone from creating, updating, or deleting doctors (this should be done via backend)
+      allow create, update, delete: if false;
+    }
+  }
+}
