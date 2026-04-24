@@ -1,6 +1,7 @@
 # Historimed-Startup-Weekend-Health-2025
 Projeto ganhador do 2° lugar e criado durante o Startup Weekend Health 2025.
 
+Dica pressione e segure a tecla crtl + clique do mouse para abrir em outra página
 <p>
   📸 <strong>Evento no Instagram:</strong><br>
   👉 <a href="https://www.instagram.com/swfloripaoficial/" target="_blank">
@@ -10,6 +11,7 @@ Projeto ganhador do 2° lugar e criado durante o Startup Weekend Health 2025.
 
 <img width="474" height="674" alt="image" src="https://github.com/user-attachments/assets/56fc831b-0cde-425c-bc66-da3fd91cc13d" />
 
+Dica pressione e segure a tecla crtl + clique do mouse para abrir em outra página
 <p>
   🚀 <strong>Protótipo (criado em 1 final de semana):</strong><br>
   👉 <a href="https://historimed-startup-weekend-health-2-seven.vercel.app" target="_blank">
